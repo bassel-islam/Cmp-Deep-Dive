@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-server-status',
@@ -7,11 +7,20 @@ import { Component } from '@angular/core';
   templateUrl: './server-status.component.html',
   styleUrl: './server-status.component.css',
 })
-export class ServerStatusComponent {
+export class ServerStatusComponent implements OnInit, OnDestroy {
   currentStatus = 'offline';
-  constructor() {
-    setInterval(() => {
-      this.currentStatus = this.currentStatus === 'online' ? 'offline' : 'online';
+  private interval?: number;
+  constructor() {}
+
+  ngOnInit() {
+    this.interval = setInterval(() => {
+      this.currentStatus =
+        this.currentStatus === 'online' ? 'offline' : 'online';
     }, 5000);
   }
+
+  ngOnDestroy() {
+    clearTimeout(this.interval);
+  }
+
 }
